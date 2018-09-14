@@ -1,0 +1,38 @@
+{% load i18n sekizai_tags %}
+
+<div class="panel panel-default">
+<div class="panel-body n12n">
+<h4>
+  <a href="#n12n-fields" data-toggle="collapse" aria-expanded="false" aria-controls="n12n-fields">
+	<span class="icon icon-triangle-down"></span>
+	{% trans 'Notifications' %}
+  </a>
+</h4>
+<div id="n12n-fields" class="collapse">
+
+{{ notification_formset.management_form }}
+{% for n12n_form in notification_formset %}
+	{% if forloop.first %}
+		{% addtoblock 'js' %}
+			{{ n12n_form.media.js }}
+		{% endaddtoblock %}
+	{% endif %}
+	{% for field in n12n_form %}
+		{% if forloop.counter == 2 %}
+			<h5 class="">
+			  <a href="#n12n-members" data-toggle="collapse" aria-expanded="false" aria-controls="n12n-members">
+			    <span class="icon icon-triangle-down"></span>
+			    {% trans 'Individual Members' %}
+			  </a>
+			</h5>
+			<div id="n12n-members" class="collapse">
+    	    {% include "spaces_notifications/form_field.html" %}
+			</div>
+		{% else %}
+			{% include "spaces_notifications/form_field.html" %}
+		{% endif %}
+    {% endfor %}
+{% endfor %}
+</div>
+</div>
+</div>

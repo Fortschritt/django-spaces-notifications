@@ -1,0 +1,39 @@
+{% load i18n n12n_tags widget_tweaks %}
+
+{% if field.is_hidden %}
+  {{ field }}
+{% else %}
+	<fieldset class="form-group m-b">
+{% comment %}
+       {% if field.label %}
+        <legend for="{{ field.id_for_label }}" class="control-label">
+        {{ field.label|safe }}
+        </legend>
+      {% endif %}
+{% endcomment %}
+	  <div id="{{ field.id_for_label }}">
+	  {% for checkbox in field %}<div class="btn btn-sm btn-default btn-n12n
+			{% if field.id_for_label == "id_form-0-notify_by_role_0" %}	btn-primary-outline	{% endif %}">
+		<div class="checkbox-inline custom-control custom-checkbox" 
+			{% if field.id_for_label != "id_form-0-notify_by_role_0" %}
+			data-is-team={{ checkbox.choice_value|is_id_team:space }}
+			data-is-admin ={{ checkbox.choice_value|is_id_admin:space }}
+			{% endif %}>
+		  <label>
+			{{ checkbox.tag }}
+			<span class="custom-control-indicator"></span>
+			{% trans checkbox.choice_label %}
+		  </label>
+		</div></div>
+	  {% endfor %}
+	  </div>
+      {% if field.errors %}
+        {% for error in field.errors %}
+          <div id="error_{{ forloop.counter }}_{{ field.auto_id }}" class="help-block"><strong>{{ error }}</strong>
+        {% endfor %}
+      {% endif %}
+      {% if field.help_text %}
+        <p id="hint_{{ field.auto_id }}" class="help-block">{{ field.help_text|safe }}</p>
+      {% endif %}
+	</fieldset>
+{% endif %}

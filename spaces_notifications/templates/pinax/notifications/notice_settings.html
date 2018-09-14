@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% load i18n sekizai_tags %}
+
+{% block body_id %}notification-settings{% endblock %}
+
+{% block head_title %}{% trans "Notification Settings" %} - {{ block.super }}{% endblock %}
+
+{% block content %}
+	<div class="panel panel-default col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2 col-xl-6 col-xl-offset-3">
+	<div class="panel-body">
+    <h2>{% trans "Notifications" %} <small class="text-muted">{% trans 'for' %} {{ user }} </small></h2>
+
+    {% url "account_settings" as email_url %}
+    {% if not request.user.email %}
+        {% blocktrans %}
+        <p class="alert alert-warning">
+            <span class="warning">Note</span>:
+            You do not have a verified email address to which notices can be sent. <a href="{{ email_url }}">Add one</a> now.
+        </p>
+        {% endblocktrans %}
+	{% else %}
+		<p>
+		{% blocktrans %}
+		Send notification emails for the following events:
+		{% endblocktrans %}
+		</p>
+    {% endif %}
+
+    <form method="POST" class="form" action="">
+        {% csrf_token %}
+		<div class="table-responsive">
+        <table class="table table-striped notice_settings">
+			<thead>
+            <tr>
+                <th>{% trans "Notification Type" %}</th>
+                {% for header in notice_settings.column_headers %}
+                    <th>
+                        {{ header.title }}
+                    </th>
+                {% endfor %}
+            </tr>
+			</thead>
+			<tbody>
+            {% for row in notice_settings.rows %}
+                <tr class="notice-row">
+                    <td>
+                        <strong>{% trans row.notice_type.display %}</strong><br/>
+						{% if row.notice_type.description != row.notice_type.display %}
+                        <span class="notice_type_description">
+                            {% trans row.notice_type.description %}
+                        </span>
+						{% endif %}
+                    </td>
+                    {% for cell in row.cells %}
+                        <td>
+                            <input type="checkbox" name="{{ cell.0 }}" {% if cell.1 %}checked="yes"{% endif %} />
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+			</tbody>
+        </table>
+		</div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary pull-right">{% trans "Save" %}</button>
+			<a href="{% url 'collab_profile:detail' user.pk %}" class="btn btn-default pull-right m-r">{% trans 'Back' %}</a>
+        </div>
+    </form>
+	</div>
+	</div>
+{% endblock %}
