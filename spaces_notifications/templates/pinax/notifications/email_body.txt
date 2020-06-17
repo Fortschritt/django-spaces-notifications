@@ -1,4 +1,4 @@
-{% load i18n collab_tags %}{% url "notification_notice_settings" as notices_url %}{% firstof object_title "Not provided" as title %}{% firstof object_link space_url as direct_link%}{% blocktrans with user=recipient|nice_name %}Hello {{ user }},
+{% load i18n collab_tags %}{% url "pinax_notifications:notice_settings" as notices_url %}{% firstof object_title "Not provided" as title %}{% firstof object_link space_url as direct_link%}{% blocktrans with user=recipient|nice_name %}Hello {{ user }},
 
 {{ message }}
 Title: {{ title }}
